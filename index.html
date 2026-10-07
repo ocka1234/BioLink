@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ระบบ Bio Link และโปรไฟล์ดิจิทัลบุคลากร | University Bio Link</title>
+    <title>ระบบ Bio Link และโปรไฟล์ดิจิทัลบุคลากร | UBU Bio Link</title>
     
     <!-- Google Fonts: Prompt & Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -87,6 +87,42 @@
             --univ-gradient-from: #ea580c; --univ-gradient-to: #9a3412;
         }
 
+
+        .theme-ubu #btnViewPublic.bg-univ-600,
+        .theme-ubu #btnViewDashboard.bg-univ-600 {
+            background-color: #f9d746;
+            color: #20409a;
+            font-weight: 600;
+        }
+        .theme-ubu .brand-logo {
+            background-image: none;
+            background-color: #20409a;
+        }
+
+        /* เอากรอบดำบนแถบหัวเว็บออก (ปุ่มสลับมุมมอง, ช่องเลือกธีม, ปุ่มเต็มจอ/มือถือ, เส้นล่างแถบ) */
+        .theme-ubu .view-switcher,
+        .theme-ubu #frameToggleContainer,
+        .theme-ubu #themeSelector {
+            background-color: transparent;
+            border-color: transparent;
+        }
+        .theme-ubu header {
+            border-bottom-color: transparent;
+        }
+        /* ช่องเลือกธีมถูกล็อก (disabled) ให้เป็น ม.อุบลฯ เท่านั้น */
+        .theme-ubu #themeSelector:disabled {
+            color: #ffffff;
+            opacity: 1;
+            cursor: not-allowed;
+            -webkit-text-fill-color: #ffffff;
+        }
+
+        .theme-ubu {
+            --univ-50: #fffbe8; --univ-100: #fef3bf; --univ-500: #f9d746;
+            --univ-600: #20409a; --univ-700: #1a3480; --univ-800: #142966;
+            --univ-gradient-from: #20409a; --univ-gradient-to: #142966;
+        }
+
         .theme-cmu {
             --univ-50: #f5f3ff; --univ-100: #ede9fe; --univ-500: #8b5cf6;
             --univ-600: #7c3aed; --univ-700: #6d28d9; --univ-800: #5b21b6;
@@ -159,27 +195,33 @@
         .pulse-badge {
             animation: pulse-ring 3s infinite ease-in-out;
         }
+
+        .brand-logo-img { display: none; }
+        .theme-ubu .brand-logo-img { display: block; }
+        .theme-ubu .brand-logo > i.fa-graduation-cap { display: none; }
+
+
     </style>
 </head>
-<body class="h-full text-slate-800 theme-chula flex flex-col font-sans transition-colors duration-300">
+<body class="h-full text-slate-800 theme-ubu flex flex-col font-sans transition-colors duration-300">
 
     <!-- TOP TOOLBAR & CONTROLS -->
-    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
+    <header class=" brand-logo bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
             
             <!-- Brand & Title -->
             <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-univ-600 to-univ-500 flex items-center justify-center text-white shadow-md font-bold text-lg">
-                    <i class="fa-solid fa-graduation-cap"></i>
+                    <img src="https://www.ubu.ac.th/images/Ubu_logo.png" alt="UBU Logo" class="brand-logo-img w-full h-full object-contain p-1">
                 </div>
                 <div class="hidden sm:block">
-                    <h1 class="text-base font-semibold text-white tracking-wide">University Bio Link</h1>
-                    <p class="text-xs text-slate-400">ระบบโปรไฟล์และลิงก์ดิจิทัลบุคลากรมหาวิทยาลัย</p>
+                    <h1 class="text-base font-semibold text-white tracking-wide">UBU Bio Link</h1>
+                    <p class="text-xs text-slate-400">ระบบโปรไฟล์และลิงก์ดิจิทัลบุคลากรมหาวิทยาลัยอุบลราชธานี</p>
                 </div>
             </div>
 
             <!-- View Mode Switcher Buttons -->
-            <div class="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700">
+            <div class="view-switcher flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700">
                 <button id="btnViewPublic" onclick="switchMainView('public')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 bg-univ-600 text-white shadow-sm">
                     <i class="fa-solid fa-globe"></i>
                     <span class="hidden md:inline">หน้าโปรไฟล์สาธารณะ (Public View)</span>
@@ -196,13 +238,14 @@
             <div class="flex items-center space-x-3">
                 <!-- Theme Palette Selector -->
                 <div class="relative inline-block text-left">
-                    <select id="themeSelector" onchange="changeUniversityTheme(this.value)" class="bg-slate-800 text-slate-200 text-xs rounded-xl px-3 py-1.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-univ-500 cursor-pointer">
+                    <select id="themeSelector" disabled title="ธีมถูกกำหนดเป็นมหาวิทยาลัยอุบลราชธานี" onchange="changeUniversityTheme(this.value)" class="bg-slate-800 text-slate-200 text-xs rounded-xl px-3 py-1.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-univ-500 cursor-pointer">
                         <option value="theme-chula">🌸 จุฬาฯ (ชมพู)</option>
                         <option value="theme-ku">🌿 เกษตรฯ (เขียว)</option>
                         <option value="theme-mahidol">🏛️ มหิดล (น้ำเงิน)</option>
                         <option value="theme-tu">🔥 ธรรมศาสตร์ (แดง)</option>
                         <option value="theme-sut">🍊 มทส. (แสด)</option>
                         <option value="theme-cmu">💜 มช. (ม่วง)</option>
+                        <option value="theme-ubu" selected>💛 อุบลฯ (เหลือง-น้ำเงิน)</option>
                     </select>
                 </div>
 
@@ -241,7 +284,7 @@
                         <div class="absolute top-4 left-4 right-4 flex items-center justify-between text-white">
                             <div class="flex items-center space-x-2 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 text-xs font-medium">
                                 <i class="fa-solid fa-university text-univ-500"></i>
-                                <span id="displayUniversity">มหาวิทยาลัยเทคโนโลยีแห่งชาติ</span>
+                                <span id="displayUniversity">มหาวิทยาลัยอุบลราชธานี</span>
                             </div>
                             <span class="bg-emerald-500/90 text-white px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase flex items-center gap-1 shadow-sm">
                                 <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> Live Profile
@@ -340,7 +383,7 @@
                                 <span>Official Digital Identity System</span>
                             </div>
                             <p class="text-[11px] text-slate-400">
-                                สำนักบริการคอมพิวเตอร์ มหาวิทยาลัยเทคโนโลยีแห่งชาติ © 2026
+                                สำนักเทคโนโลยีดิจิทัลและทรัพยากรการเรียนรู้ มหาวิทยาลัยอุบลราชธานี © 2026
                             </p>
                         </div>
 
@@ -763,7 +806,7 @@
         const appState = {
             currentView: 'public', // 'public' | 'dashboard'
             deviceFrame: 'fullscreen', // 'fullscreen' | 'mobile'
-            currentTheme: 'theme-chula',
+            currentTheme: 'theme-ubu',
             activeCategory: 'ทั้งหมด',
             searchQuery: '',
             
@@ -772,7 +815,7 @@
                 name: 'ผศ.ดร.วิชิต วงศ์วิจิตร',
                 position: 'อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์',
                 faculty: 'คณะวิศวกรรมศาสตร์',
-                university: 'มหาวิทยาลัยเทคโนโลยีแห่งชาติ',
+                university: 'มหาวิทยาลัยอุบลราชธานี',
                 office: 'ห้อง 408 อาคารวิศวกรรม 100 ปี',
                 email: 'wichit.w@university.ac.th',
                 officeHours: 'เข้าพบ: อ. & พฤ. 13:30 - 16:30 น.',
@@ -796,7 +839,7 @@
                 { id: 9, title: 'LinkedIn Professional Profile', category: 'ช่องทางติดต่อ', url: 'https://linkedin.com', icon: 'fa-brands fa-linkedin', clicks: 760, active: true, pinned: false, desc: 'ประวัติการทำงานและการเชื่อมต่อทางวิชาชีพ' }
             ],
 
-            qrColor: '#db2777'
+            qrColor: '#20409a'
         };
 
         // Chart Instances
@@ -874,7 +917,8 @@
                 'theme-mahidol': '#1d4ed8',
                 'theme-tu': '#dc2626',
                 'theme-sut': '#ea580c',
-                'theme-cmu': '#7c3aed'
+                'theme-cmu': '#7c3aed',
+                'theme-ubu': '#20409a'
             };
             if (themeColors[themeClass]) {
                 setQrColor(themeColors[themeClass]);
