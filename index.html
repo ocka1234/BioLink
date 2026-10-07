@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="th" class="h-full bg-slate-50">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ระบบ Bio Link และโปรไฟล์ดิจิทัลบุคลากร | University Bio Link</title>
+    
+    <!-- Google Fonts: Prompt & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- FontAwesome 6 CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js CDN for Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- QRCode.js CDN for QR Code Generation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        univ: {
+                            50: 'var(--univ-50)',
+                            100: 'var(--univ-100)',
+                            500: 'var(--univ-500)',
+                            600: 'var(--univ-600)',
+                            700: 'var(--univ-700)',
+                            800: 'var(--univ-800)',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Theme Variables Switcher */
+        :root {
+            --univ-50: #fdf2f8;
+            --univ-100: #fce7f3;
+            --univ-500: #ec4899;
+            --univ-600: #db2777;
+            --univ-700: #be185d;
+            --univ-800: #9d174d;
+            --univ-gradient-from: #db2777;
+            --univ-gradient-to: #be185d;
+        }
+
+        .theme-chula {
+            --univ-50: #fdf2f8; --univ-100: #fce7f3; --univ-500: #ec4899;
+            --univ-600: #db2777; --univ-700: #be185d; --univ-800: #9d174d;
+            --univ-gradient-from: #db2777; --univ-gradient-to: #be185d;
+        }
+
+        .theme-ku {
+            --univ-50: #ecfdf5; --univ-100: #d1fae5; --univ-500: #10b981;
+            --univ-600: #059669; --univ-700: #047857; --univ-800: #065f46;
+            --univ-gradient-from: #059669; --univ-gradient-to: #065f46;
+        }
+
+        .theme-mahidol {
+            --univ-50: #eff6ff; --univ-100: #dbeafe; --univ-500: #3b82f6;
+            --univ-600: #1d4ed8; --univ-700: #1e40af; --univ-800: #1e3a8a;
+            --univ-gradient-from: #1e3a8a; --univ-gradient-to: #1d4ed8;
+        }
+
+        .theme-tu {
+            --univ-50: #fef2f2; --univ-100: #fee2e2; --univ-500: #ef4444;
+            --univ-600: #dc2626; --univ-700: #b91c1c; --univ-800: #991b1b;
+            --univ-gradient-from: #dc2626; --univ-gradient-to: #991b1b;
+        }
+
+        .theme-sut {
+            --univ-50: #fff7ed; --univ-100: #ffedd5; --univ-500: #f97316;
+            --univ-600: #ea580c; --univ-700: #c2410c; --univ-800: #9a3412;
+            --univ-gradient-from: #ea580c; --univ-gradient-to: #9a3412;
+        }
+
+        .theme-cmu {
+            --univ-50: #f5f3ff; --univ-100: #ede9fe; --univ-500: #8b5cf6;
+            --univ-600: #7c3aed; --univ-700: #6d28d9; --univ-800: #5b21b6;
+            --univ-gradient-from: #7c3aed; --univ-gradient-to: #5b21b6;
+        }
+
+        /* Glassmorphism & Custom Scrollbar */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
+        }
+
+        /* Mobile Frame Styling */
+        .mobile-device-frame {
+            width: 390px;
+            height: 790px;
+            border-radius: 44px;
+            border: 12px solid #0f172a;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .mobile-notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 140px;
+            height: 24px;
+            background-color: #0f172a;
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 50;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .mobile-notch::after {
+            content: '';
+            width: 12px;
+            height: 12px;
+            background-color: #1e293b;
+            border-radius: 50%;
+        }
+
+        /* Custom Pulse Animation */
+        @keyframes pulse-ring {
+            0% { transform: scale(0.95); opacity: 0.8; }
+            50% { transform: scale(1.05); opacity: 0.4; }
+            100% { transform: scale(0.95); opacity: 0.8; }
+        }
+        .pulse-badge {
+            animation: pulse-ring 3s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="h-full text-slate-800 theme-chula flex flex-col font-sans transition-colors duration-300">
+
+    <!-- TOP TOOLBAR & CONTROLS -->
+    <header class="bg-slate-900 text-white sticky top-0 z-40 shadow-md border-b border-slate-800">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between gap-4">
+            
+            <!-- Brand & Title -->
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-univ-600 to-univ-500 flex items-center justify-center text-white shadow-md font-bold text-lg">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                </div>
+                <div class="hidden sm:block">
+                    <h1 class="text-base font-semibold text-white tracking-wide">University Bio Link</h1>
+                    <p class="text-xs text-slate-400">ระบบโปรไฟล์และลิงก์ดิจิทัลบุคลากรมหาวิทยาลัย</p>
+                </div>
+            </div>
+
+            <!-- View Mode Switcher Buttons -->
+            <div class="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700">
+                <button id="btnViewPublic" onclick="switchMainView('public')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 bg-univ-600 text-white shadow-sm">
+                    <i class="fa-solid fa-globe"></i>
+                    <span class="hidden md:inline">หน้าโปรไฟล์สาธารณะ (Public View)</span>
+                    <span class="md:hidden">Public</span>
+                </button>
+                <button id="btnViewDashboard" onclick="switchMainView('dashboard')" class="px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700/50">
+                    <i class="fa-solid fa-sliders"></i>
+                    <span class="hidden md:inline">จัดการโปรไฟล์ (Staff Dashboard)</span>
+                    <span class="md:hidden">Dashboard</span>
+                </button>
+            </div>
+
+            <!-- Controls: Theme Selector & Device Frame Switch -->
+            <div class="flex items-center space-x-3">
+                <!-- Theme Palette Selector -->
+                <div class="relative inline-block text-left">
+                    <select id="themeSelector" onchange="changeUniversityTheme(this.value)" class="bg-slate-800 text-slate-200 text-xs rounded-xl px-3 py-1.5 border border-slate-700 focus:outline-none focus:ring-2 focus:ring-univ-500 cursor-pointer">
+                        <option value="theme-chula">🌸 จุฬาฯ (ชมพู)</option>
+                        <option value="theme-ku">🌿 เกษตรฯ (เขียว)</option>
+                        <option value="theme-mahidol">🏛️ มหิดล (น้ำเงิน)</option>
+                        <option value="theme-tu">🔥 ธรรมศาสตร์ (แดง)</option>
+                        <option value="theme-sut">🍊 มทส. (แสด)</option>
+                        <option value="theme-cmu">💜 มช. (ม่วง)</option>
+                    </select>
+                </div>
+
+                <!-- Frame Mode Toggle (Active only in Public View) -->
+                <div id="frameToggleContainer" class="flex items-center bg-slate-800 p-1 rounded-xl border border-slate-700">
+                    <button id="btnFrameFull" onclick="toggleDeviceFrame('fullscreen')" class="p-1.5 rounded-lg text-xs transition-colors bg-slate-700 text-white" title="เต็มจอ (Fullscreen)">
+                        <i class="fa-solid fa-expand"></i>
+                    </button>
+                    <button id="btnFrameMobile" onclick="toggleDeviceFrame('mobile')" class="p-1.5 rounded-lg text-xs transition-colors text-slate-400 hover:text-white" title="จำลองมือถือ (Mobile View)">
+                        <i class="fa-solid fa-mobile-screen-button"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- MAIN CONTAINER -->
+    <main class="flex-1 overflow-y-auto">
+
+        <!-- VIEW 1: PUBLIC BIO LINK VIEW -->
+        <section id="publicViewSection" class="min-h-full py-6 transition-all duration-300">
+            <div id="publicContainer" class="max-w-2xl mx-auto px-4">
+                
+                <!-- Public Mobile Frame Shell wrapper -->
+                <div id="mobileShell" class="w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200/80 transition-all duration-300">
+                    
+                    <!-- Mobile Notch Bar (Visible only in mobile mode) -->
+                    <div id="mobileNotchHeader" class="hidden mobile-notch"></div>
+
+                    <!-- Banner & University Branding -->
+                    <div class="relative h-44 sm:h-52 bg-slate-800 overflow-hidden">
+                        <img id="displayCover" src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200" alt="University Cover" class="w-full h-full object-cover opacity-80">
+                        <div class="absolute inset-0 bg-gradient-to-t from-slate-900/90 via-slate-900/30 to-transparent"></div>
+                        
+                        <!-- Top University Badge -->
+                        <div class="absolute top-4 left-4 right-4 flex items-center justify-between text-white">
+                            <div class="flex items-center space-x-2 bg-slate-900/60 backdrop-blur-md px-3 py-1.5 rounded-full border border-white/20 text-xs font-medium">
+                                <i class="fa-solid fa-university text-univ-500"></i>
+                                <span id="displayUniversity">มหาวิทยาลัยเทคโนโลยีแห่งชาติ</span>
+                            </div>
+                            <span class="bg-emerald-500/90 text-white px-2.5 py-0.5 rounded-full text-[10px] font-semibold tracking-wider uppercase flex items-center gap-1 shadow-sm">
+                                <span class="w-1.5 h-1.5 rounded-full bg-white animate-ping"></span> Live Profile
+                            </span>
+                        </div>
+                    </div>
+
+                    <!-- Profile Header Card Body -->
+                    <div class="relative px-5 pt-0 pb-6 bg-white">
+                        
+                        <!-- Avatar & Status -->
+                        <div class="flex justify-between items-end -mt-16 sm:-mt-20 mb-4">
+                            <div class="relative">
+                                <img id="displayAvatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" alt="Avatar" class="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl object-cover ring-4 ring-white shadow-xl bg-white">
+                                <div class="absolute -bottom-1 -right-1 bg-univ-600 text-white w-7 h-7 rounded-full flex items-center justify-center ring-2 ring-white text-xs shadow" title="บุคลากรรอบการยืนยันตัวตน">
+                                    <i class="fa-solid fa-circle-check"></i>
+                                </div>
+                            </div>
+
+                            <!-- Quick Action Buttons -->
+                            <div class="flex items-center space-x-2 mb-1">
+                                <button onclick="downloadVCard()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid fa-address-card text-univ-600"></i>
+                                    <span class="hidden sm:inline">บันทึก</span> vCard
+                                </button>
+                                <button onclick="openQrModal()" class="px-3 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow-sm">
+                                    <i class="fa-solid fa-qrcode text-univ-600"></i>
+                                    QR
+                                </button>
+                                <button onclick="copyProfileLink()" class="px-3 py-2 bg-univ-600 hover:bg-univ-700 text-white text-xs font-semibold rounded-xl transition flex items-center gap-1.5 shadow-md">
+                                    <i class="fa-solid fa-share-nodes"></i>
+                                    แชร์
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Name & Academic Title -->
+                        <div class="space-y-1">
+                            <div class="flex items-center gap-2 flex-wrap">
+                                <h2 id="displayName" class="text-xl sm:text-2xl font-bold text-slate-900 tracking-tight">ผศ.ดร.วิชิต วงศ์วิจิตร</h2>
+                                <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-medium bg-amber-50 text-amber-700 border border-amber-200">
+                                    <i class="fa-solid fa-award text-amber-500"></i>
+                                    <span id="displayVerifiedBadge">อาจารย์ประจำรับรองแล้ว</span>
+                                </span>
+                            </div>
+                            <p id="displayPosition" class="text-sm font-medium text-univ-700">อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์</p>
+                            <p id="displayFaculty" class="text-xs text-slate-500 flex items-center gap-1.5">
+                                <i class="fa-solid fa-building-columns"></i>
+                                คณะวิศวกรรมศาสตร์
+                            </p>
+                        </div>
+
+                        <!-- Bio summary -->
+                        <p id="displayBio" class="mt-3 text-xs sm:text-sm text-slate-600 leading-relaxed bg-slate-50 p-3 rounded-xl border border-slate-100">
+                            อาจารย์และนักวิจัยเฉพาะทางด้าน Artificial Intelligence, Machine Learning และ Cloud Computing สำหรับระบบการศึกษายุคใหม่
+                        </p>
+
+                        <!-- Info Pills (Office & Contact) -->
+                        <div class="mt-3 flex flex-wrap gap-2 text-xs">
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg">
+                                <i class="fa-solid fa-door-open text-univ-600"></i>
+                                <span id="displayOffice">ห้อง 408 อาคารวิศวกรรม 100 ปี</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-slate-100 text-slate-700 rounded-lg">
+                                <i class="fa-solid fa-envelope text-univ-600"></i>
+                                <span id="displayEmail">wichit.w@university.ac.th</span>
+                            </div>
+                            <div class="flex items-center gap-1.5 px-3 py-1.5 bg-emerald-50 text-emerald-700 border border-emerald-200 rounded-lg">
+                                <i class="fa-solid fa-clock"></i>
+                                <span id="displayOfficeHours">เข้าพบ: อ. & พฤ. 13:30 - 16:30 น.</span>
+                            </div>
+                        </div>
+
+                        <!-- Category Filter Tabs & Search -->
+                        <div class="mt-6 pt-4 border-t border-slate-100 space-y-3">
+                            <div class="relative">
+                                <i class="fa-solid fa-magnifying-glass absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-xs"></i>
+                                <input type="text" id="publicSearchInput" oninput="filterLinks()" placeholder="ค้นหาลิงก์ งานวิจัย วิชาที่สอน หรือเอกสาร..." class="w-full pl-9 pr-4 py-2 bg-slate-100 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none focus:ring-2 focus:ring-univ-500 focus:bg-white transition">
+                            </div>
+
+                            <!-- Category Chips -->
+                            <div id="categoryChips" class="flex gap-2 overflow-x-auto pb-1 no-scrollbar text-xs">
+                                <!-- Rendered dynamically by JS -->
+                            </div>
+                        </div>
+
+                        <!-- Links Card List -->
+                        <div id="publicLinksContainer" class="mt-4 space-y-3">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+
+                        <!-- Footer Footer Branding -->
+                        <div class="mt-8 pt-6 border-t border-slate-100 text-center space-y-2">
+                            <div class="inline-flex items-center gap-2 text-xs font-semibold text-slate-400">
+                                <i class="fa-solid fa-shield-halved text-univ-600"></i>
+                                <span>Official Digital Identity System</span>
+                            </div>
+                            <p class="text-[11px] text-slate-400">
+                                สำนักบริการคอมพิวเตอร์ มหาวิทยาลัยเทคโนโลยีแห่งชาติ © 2026
+                            </p>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- VIEW 2: STAFF DASHBOARD & EDITOR VIEW -->
+        <section id="dashboardViewSection" class="hidden max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                
+                <!-- Sidebar Navigation Menu -->
+                <aside class="lg:col-span-3 space-y-4">
+                    <div class="bg-white rounded-2xl p-4 shadow-sm border border-slate-200/80">
+                        <div class="flex items-center space-x-3 pb-4 mb-4 border-b border-slate-100">
+                            <img id="dashSidebarAvatar" src="https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400" alt="Profile" class="w-12 h-12 rounded-xl object-cover ring-2 ring-univ-500">
+                            <div class="overflow-hidden">
+                                <h3 id="dashSidebarName" class="text-sm font-bold text-slate-900 truncate">ผศ.ดร.วิชิต วงศ์วิจิตร</h3>
+                                <p class="text-xs text-slate-500 truncate">อาจารย์ประจำคณะวิศวฯ</p>
+                            </div>
+                        </div>
+
+                        <nav class="space-y-1">
+                            <button onclick="switchDashTab('profile')" id="dashTabBtn-profile" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition bg-univ-50 text-univ-700">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-user-pen text-sm"></i>
+                                    <span>แก้ไขข้อมูลส่วนตัว</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+
+                            <button onclick="switchDashTab('links')" id="dashTabBtn-links" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-link text-sm"></i>
+                                    <span>จัดการลิงก์ & เอกสาร</span>
+                                </div>
+                                <span id="dashLinkCountBadge" class="bg-slate-200 text-slate-700 text-[10px] px-2 py-0.5 rounded-full font-bold">9</span>
+                            </button>
+
+                            <button onclick="switchDashTab('analytics')" id="dashTabBtn-analytics" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-chart-column text-sm"></i>
+                                    <span>สถิติการเข้าชม (Analytics)</span>
+                                </div>
+                                <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+                            </button>
+
+                            <button onclick="switchDashTab('qr')" id="dashTabBtn-qr" class="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-50 hover:text-slate-900">
+                                <div class="flex items-center gap-2.5">
+                                    <i class="fa-solid fa-qrcode text-sm"></i>
+                                    <span>ตั้งค่า QR Code & Brand</span>
+                                </div>
+                                <i class="fa-solid fa-chevron-right text-[10px]"></i>
+                            </button>
+                        </nav>
+                    </div>
+
+                    <!-- Direct Public Link Card -->
+                    <div class="bg-gradient-to-br from-slate-900 to-slate-800 text-white rounded-2xl p-4 shadow-sm space-y-3">
+                        <div class="flex items-center justify-between text-xs text-slate-400">
+                            <span>ลิงก์ตรงของคุณ</span>
+                            <i class="fa-solid fa-link"></i>
+                        </div>
+                        <p class="text-xs font-mono font-semibold text-univ-100 break-all bg-slate-800/80 p-2 rounded-lg border border-slate-700">
+                            bio.university.ac.th/@wichit.w
+                        </p>
+                        <button onclick="copyProfileLink()" class="w-full py-2 bg-univ-600 hover:bg-univ-500 text-white text-xs font-semibold rounded-xl transition flex items-center justify-center gap-2 shadow">
+                            <i class="fa-regular fa-copy"></i>
+                            คัดลอก URL ลิงก์โปรไฟล์
+                        </button>
+                    </div>
+                </aside>
+
+                <!-- Dashboard Content Area -->
+                <main class="lg:col-span-9">
+                    
+                    <!-- TAB 1: PROFILE EDITOR -->
+                    <div id="dashTabContent-profile" class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-6">
+                        <div class="flex items-center justify-between border-b border-slate-100 pb-4">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">แก้ไขข้อมูลส่วนตัวและตำแหน่งวิชาการ</h3>
+                                <p class="text-xs text-slate-500">ปรับแต่งรายละเอียดที่จะแสดงบนหน้า Bio Link ของคุณ</p>
+                            </div>
+                            <button onclick="saveProfileChanges()" class="px-4 py-2 bg-univ-600 hover:bg-univ-700 text-white text-xs font-semibold rounded-xl transition shadow-md flex items-center gap-2">
+                                <i class="fa-solid fa-floppy-disk"></i>
+                                บันทึกการเปลี่ยนแปลง
+                            </button>
+                        </div>
+
+                        <form id="profileForm" onsubmit="event.preventDefault(); saveProfileChanges();" class="space-y-5">
+                            
+                            <!-- Image URL Inputs -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL รูปโปรไฟล์ (Avatar URL)</label>
+                                    <input type="text" id="editAvatar" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL รูปภาพปก (Cover Banner URL)</label>
+                                    <input type="text" id="editCover" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Name & Academic Title -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">คำนำหน้า / ตำแหน่งวิชาการ</label>
+                                    <input type="text" id="editTitle" placeholder="ผศ.ดร." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                                <div class="sm:col-span-2">
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อ - นามสกุล</label>
+                                    <input type="text" id="editName" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Position & Faculty -->
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">ตำแหน่งงานประจำ</label>
+                                    <input type="text" id="editPosition" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">คณะ / หน่วยงานสังกัด</label>
+                                    <input type="text" id="editFaculty" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                            </div>
+
+                            <!-- Bio Summary -->
+                            <div>
+                                <label class="block text-xs font-semibold text-slate-700 mb-1">ประวัติย่อ / ความเชี่ยวชาญ (Bio Summary)</label>
+                                <textarea id="editBio" rows="3" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none"></textarea>
+                            </div>
+
+                            <!-- Office, Email & Hours -->
+                            <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">ห้องทำงาน / อาคาร</label>
+                                    <input type="text" id="editOffice" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">อีเมลติดต่อ</label>
+                                    <input type="email" id="editEmail" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-semibold text-slate-700 mb-1">ช่วงเวลาเข้าพบ (Office Hours)</label>
+                                    <input type="text" id="editOfficeHours" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- TAB 2: LINK MANAGER -->
+                    <div id="dashTabContent-links" class="hidden space-y-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 flex items-center justify-between">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">จัดการรายการลิงก์ & ผลงานวิชาการ</h3>
+                                <p class="text-xs text-slate-500">เพิ่ม ลบ จัดลำดับ หรือปิดการแสดงผลลิงก์ในหน้าโปรไฟล์ของคุณ</p>
+                            </div>
+                            <button onclick="openAddLinkModal()" class="px-4 py-2 bg-univ-600 hover:bg-univ-700 text-white text-xs font-semibold rounded-xl transition shadow-md flex items-center gap-2">
+                                <i class="fa-solid fa-plus"></i>
+                                เพิ่มลิงก์ใหม่
+                            </button>
+                        </div>
+
+                        <!-- Links Table List -->
+                        <div id="dashLinksList" class="space-y-3">
+                            <!-- Rendered dynamically by JS -->
+                        </div>
+                    </div>
+
+                    <!-- TAB 3: ANALYTICS & INSIGHTS -->
+                    <div id="dashTabContent-analytics" class="hidden space-y-6">
+                        <!-- Stat Summary Cards -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-medium">
+                                    <span>ยอดผู้เข้าชมรวม</span>
+                                    <div class="w-8 h-8 rounded-xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                                        <i class="fa-solid fa-eye"></i>
+                                    </div>
+                                </div>
+                                <h4 id="statTotalViews" class="text-2xl font-bold text-slate-900">14,520</h4>
+                                <p class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> +12.4% จากสัปดาห์ก่อน
+                                </p>
+                            </div>
+
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-medium">
+                                    <span>ยอดคลิกลิงก์รวม</span>
+                                    <div class="w-8 h-8 rounded-xl bg-univ-50 text-univ-600 flex items-center justify-center">
+                                        <i class="fa-solid fa-hand-pointer"></i>
+                                    </div>
+                                </div>
+                                <h4 id="statTotalClicks" class="text-2xl font-bold text-slate-900">11,590</h4>
+                                <p class="text-[11px] text-emerald-600 font-semibold flex items-center gap-1">
+                                    <i class="fa-solid fa-arrow-trend-up"></i> +8.1% ในสัปดาห์นี้
+                                </p>
+                            </div>
+
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-medium">
+                                    <span>อัตราการคลิก (CTR)</span>
+                                    <div class="w-8 h-8 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center">
+                                        <i class="fa-solid fa-percent"></i>
+                                    </div>
+                                </div>
+                                <h4 id="statCTR" class="text-2xl font-bold text-slate-900">79.8%</h4>
+                                <p class="text-[11px] text-slate-500">เฉลี่ย 1.2 คลิก / การเยี่ยมชม</p>
+                            </div>
+
+                            <div class="bg-white rounded-2xl p-5 border border-slate-200/80 shadow-sm space-y-2">
+                                <div class="flex items-center justify-between text-slate-500 text-xs font-medium">
+                                    <span>ลิงก์ที่ถูกคลิกสูงสุด</span>
+                                    <div class="w-8 h-8 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center">
+                                        <i class="fa-solid fa-trophy"></i>
+                                    </div>
+                                </div>
+                                <h4 class="text-sm font-bold text-slate-900 truncate" title="คลังเอกสารประกอบการสอน">คลังเอกสารการสอน</h4>
+                                <p class="text-[11px] text-purple-600 font-semibold">3,100 ครั้ง (26.7%)</p>
+                            </div>
+                        </div>
+
+                        <!-- Analytics Charts Row -->
+                        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                            <!-- Views Trend Line Chart -->
+                            <div class="lg:col-span-2 bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h4 class="text-sm font-bold text-slate-900">แนวโน้มการเข้าชมประจำสัปดาห์</h4>
+                                        <p class="text-xs text-slate-500">ข้อมูลผู้เข้าชมย้อนหลัง 7 วันล่าสุด</p>
+                                    </div>
+                                    <span class="text-xs font-semibold px-2.5 py-1 bg-slate-100 rounded-lg text-slate-600">สัปดาห์นี้</span>
+                                </div>
+                                <div class="h-64">
+                                    <canvas id="viewsChart"></canvas>
+                                </div>
+                            </div>
+
+                            <!-- Traffic Source Doughnut Chart -->
+                            <div class="bg-white rounded-2xl p-6 border border-slate-200/80 shadow-sm space-y-4">
+                                <div>
+                                    <h4 class="text-sm font-bold text-slate-900">ช่องทางการเข้าถึง (Traffic Sources)</h4>
+                                    <p class="text-xs text-slate-500">สัดส่วนที่มาของผู้เข้าชม</p>
+                                </div>
+                                <div class="h-56 relative flex items-center justify-center">
+                                    <canvas id="sourcesChart"></canvas>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- TAB 4: BRANDING & QR STUDIO -->
+                    <div id="dashTabContent-qr" class="hidden space-y-6">
+                        <div class="bg-white rounded-2xl p-6 shadow-sm border border-slate-200/80 space-y-6">
+                            <div>
+                                <h3 class="text-lg font-bold text-slate-900">QR Code Studio & การพิมพ์</h3>
+                                <p class="text-xs text-slate-500">สร้างและปรับแต่ง QR Code ประจำตัวเพื่อนำไปใช้ในสไลด์การสอน เอกสารวิชาการ หรือ นามบัตร</p>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center pt-4 border-t border-slate-100">
+                                <!-- QR Display Box -->
+                                <div class="flex flex-col items-center justify-center p-8 bg-slate-50 rounded-2xl border border-slate-200 text-center space-y-4">
+                                    <div class="p-4 bg-white rounded-2xl shadow-md border border-slate-100 relative">
+                                        <div id="dashQrContainer"></div>
+                                        <div class="absolute inset-0 flex items-center justify-center pointer-events-none">
+                                            <div class="w-10 h-10 bg-white rounded-xl shadow-md border border-slate-100 flex items-center justify-center p-1">
+                                                <i class="fa-solid fa-graduation-cap text-univ-600 text-lg"></i>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <p class="text-xs font-semibold text-slate-800">QR Code ประจำตัวบุคลากร</p>
+                                        <p class="text-[11px] text-slate-500">สแกนเพื่อเข้าสู่โปรไฟล์ bio.university.ac.th</p>
+                                    </div>
+                                    <div class="flex gap-2">
+                                        <button onclick="downloadQrCode('png')" class="px-4 py-2 bg-univ-600 text-white text-xs font-semibold rounded-xl hover:bg-univ-700 transition shadow flex items-center gap-1.5">
+                                            <i class="fa-solid fa-download"></i> ดาวน์โหลด PNG
+                                        </button>
+                                        <button onclick="window.print()" class="px-4 py-2 bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl hover:bg-slate-300 transition flex items-center gap-1.5">
+                                            <i class="fa-solid fa-print"></i> พิมพ์ QR
+                                        </button>
+                                    </div>
+                                </div>
+
+                                <!-- Customization Controls -->
+                                <div class="space-y-4">
+                                    <h4 class="text-sm font-bold text-slate-900">การตั้งค่ารูปแบบ QR</h4>
+                                    
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">สีของ QR Code</label>
+                                        <div class="flex gap-3">
+                                            <button onclick="setQrColor('#db2777')" class="w-8 h-8 rounded-full bg-pink-600 ring-2 ring-offset-2 ring-transparent focus:ring-pink-600"></button>
+                                            <button onclick="setQrColor('#059669')" class="w-8 h-8 rounded-full bg-emerald-600 ring-2 ring-offset-2 ring-transparent focus:ring-emerald-600"></button>
+                                            <button onclick="setQrColor('#1d4ed8')" class="w-8 h-8 rounded-full bg-blue-700 ring-2 ring-offset-2 ring-transparent focus:ring-blue-700"></button>
+                                            <button onclick="setQrColor('#dc2626')" class="w-8 h-8 rounded-full bg-red-600 ring-2 ring-offset-2 ring-transparent focus:ring-red-600"></button>
+                                            <button onclick="setQrColor('#0f172a')" class="w-8 h-8 rounded-full bg-slate-900 ring-2 ring-offset-2 ring-transparent focus:ring-slate-900"></button>
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <label class="block text-xs font-semibold text-slate-700 mb-1">ระดับความละเอียด (Error Correction)</label>
+                                        <select class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700">
+                                            <option>ระดับสูง (High - เหมาะสำหรับพิมพ์โลโก้ตรงกลาง)</option>
+                                            <option>ระดับปานกลาง (Medium)</option>
+                                        </select>
+                                    </div>
+
+                                    <div class="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-800 text-xs leading-relaxed flex items-start gap-2">
+                                        <i class="fa-solid fa-circle-info text-amber-600 mt-0.5"></i>
+                                        <span>ข้อแนะนำ: คุณสามารถใช้ QR Code นี้ในการพิมพ์ใส่ในสไลด์บรรยาย ท้ายเอกสารประมวลรายวิชา (Syllabus) หรือป้ายหน้าห้องทำงานได้ทันที</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </main>
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- MODAL 1: PUBLIC QR CODE PREVIEW MODAL -->
+    <div id="qrModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-sm w-full shadow-2xl text-center space-y-5 animate-in fade-in zoom-in duration-200">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 class="text-sm font-bold text-slate-900">QR Code สแกนเข้าสู่โปรไฟล์</h3>
+                <button onclick="closeQrModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <!-- QR Code Render Area -->
+            <div class="p-4 bg-slate-50 rounded-2xl border border-slate-100 flex flex-col items-center justify-center">
+                <div id="modalQrCode" class="bg-white p-3 rounded-xl shadow-md border border-slate-100"></div>
+            </div>
+
+            <div>
+                <h4 id="modalQrName" class="text-sm font-bold text-slate-900">ผศ.ดร.วิชิต วงศ์วิจิตร</h4>
+                <p class="text-xs text-slate-500">สแกนเพื่อเปิดดูผลงาน ตารางสอน และช่องทางติดต่อ</p>
+            </div>
+
+            <button onclick="downloadQrCode('png')" class="w-full py-2.5 bg-univ-600 hover:bg-univ-700 text-white text-xs font-semibold rounded-xl shadow-md transition">
+                <i class="fa-solid fa-download mr-1"></i> ดาวน์โหลดรูปภาพ QR Code
+            </button>
+        </div>
+    </div>
+
+    <!-- MODAL 2: ADD / EDIT LINK MODAL -->
+    <div id="linkModal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl space-y-4">
+            <div class="flex justify-between items-center border-b border-slate-100 pb-3">
+                <h3 id="linkModalTitle" class="text-sm font-bold text-slate-900">เพิ่มลิงก์ใหม่</h3>
+                <button onclick="closeLinkModal()" class="w-8 h-8 rounded-full bg-slate-100 text-slate-500 hover:bg-slate-200 flex items-center justify-center">
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="linkForm" onsubmit="event.preventDefault(); saveLinkItem();" class="space-y-3">
+                <input type="hidden" id="linkEditId">
+                
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">ชื่อหัวข้อลิงก์ / เอกสาร *</label>
+                    <input type="text" id="linkTitleInput" required placeholder="เช่น Google Scholar Profile" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">URL ปลายทาง *</label>
+                    <input type="url" id="linkUrlInput" required placeholder="https://scholar.google.com/..." class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                </div>
+
+                <div class="grid grid-cols-2 gap-3">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">หมวดหมู่ *</label>
+                        <select id="linkCategorySelect" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs text-slate-700 focus:outline-none">
+                            <option value="งานวิจัย">งานวิจัย</option>
+                            <option value="การเรียนการสอน">การเรียนการสอน</option>
+                            <option value="ช่องทางติดต่อ">ช่องทางติดต่อ</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-700 mb-1">ไอคอน FontAwesome</label>
+                        <input type="text" id="linkIconInput" placeholder="fa-graduation-cap" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-700 mb-1">คำอธิบายเพิ่มเติม (ย่อ)</label>
+                    <input type="text" id="linkDescInput" placeholder="เช่น ดรรชนีผลงานวิชาการและการอ้างอิง" class="w-full px-3.5 py-2 bg-slate-50 border border-slate-200 rounded-xl text-xs focus:ring-2 focus:ring-univ-500 focus:bg-white focus:outline-none">
+                </div>
+
+                <div class="flex items-center space-x-2 pt-2">
+                    <input type="checkbox" id="linkPinnedCheckbox" class="w-4 h-4 text-univ-600 rounded border-slate-300 focus:ring-univ-500">
+                    <label for="linkPinnedCheckbox" class="text-xs font-medium text-slate-700">📌 ปักหมุดให้อยู่ด้านบนสุด</label>
+                </div>
+
+                <div class="pt-3 flex gap-2">
+                    <button type="button" onclick="closeLinkModal()" class="w-1/2 py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-semibold rounded-xl transition">ยกเลิก</button>
+                    <button type="submit" class="w-1/2 py-2 bg-univ-600 hover:bg-univ-700 text-white text-xs font-semibold rounded-xl shadow-md transition">บันทึกข้อมูล</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATION -->
+    <div id="toastNotification" class="fixed bottom-6 right-6 z-50 bg-slate-900 text-white px-4 py-3 rounded-2xl shadow-2xl flex items-center space-x-3 transform translate-y-20 opacity-0 transition-all duration-300 pointer-events-none border border-slate-800">
+        <div id="toastIcon" class="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center text-xs">
+            <i class="fa-solid fa-check"></i>
+        </div>
+        <p id="toastMessage" class="text-xs font-medium">ทำรายการสำเร็จ</p>
+    </div>
+
+    <script>
+        // GLOBAL STATE STORE
+        const appState = {
+            currentView: 'public', // 'public' | 'dashboard'
+            deviceFrame: 'fullscreen', // 'fullscreen' | 'mobile'
+            currentTheme: 'theme-chula',
+            activeCategory: 'ทั้งหมด',
+            searchQuery: '',
+            
+            profile: {
+                title: 'ผศ.ดร.',
+                name: 'ผศ.ดร.วิชิต วงศ์วิจิตร',
+                position: 'อาจารย์ประจำภาควิชาวิศวกรรมคอมพิวเตอร์',
+                faculty: 'คณะวิศวกรรมศาสตร์',
+                university: 'มหาวิทยาลัยเทคโนโลยีแห่งชาติ',
+                office: 'ห้อง 408 อาคารวิศวกรรม 100 ปี',
+                email: 'wichit.w@university.ac.th',
+                officeHours: 'เข้าพบ: อ. & พฤ. 13:30 - 16:30 น.',
+                bio: 'อาจารย์และนักวิจัยเฉพาะทางด้าน Artificial Intelligence, Machine Learning และ Cloud Computing สำหรับระบบการศึกษายุคใหม่',
+                avatar: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&q=80&w=400',
+                cover: 'https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&q=80&w=1200',
+                verified: true
+            },
+
+            categories: ['ทั้งหมด', 'งานวิจัย', 'การเรียนการสอน', 'ช่องทางติดต่อ'],
+
+            links: [
+                { id: 1, title: 'Google Scholar Profile', category: 'งานวิจัย', url: 'https://scholar.google.com', icon: 'fa-graduation-cap', clicks: 1240, active: true, pinned: true, desc: 'ดรรชนีผลงานวิชาการและการอ้างอิง (Citations 450+)' },
+                { id: 2, title: 'คลังเอกสารประกอบการสอน (Google Drive)', category: 'การเรียนการสอน', url: 'https://drive.google.com', icon: 'fa-folder-open', clicks: 3100, active: true, pinned: true, desc: 'สไลด์บรรยาย ตัวอย่างโค้ด และโจทย์แบบฝึกหัด' },
+                { id: 3, title: 'ระบบจัดการการเรียนการสอน (Canvas LMS)', category: 'การเรียนการสอน', url: 'https://lms.university.ac.th', icon: 'fa-chalkboard-user', clicks: 2150, active: true, pinned: false, desc: 'เข้าสู่รายวิชา CPE301 Computer Networks และ CPE402 AI' },
+                { id: 4, title: 'ประมวลรายวิชา (Course Syllabus 2/2569)', category: 'การเรียนการสอน', url: 'https://drive.google.com', icon: 'fa-file-pdf', clicks: 1420, active: true, pinned: false, desc: 'เอกสารอธิบายรายวิชา เกณฑ์การวัดผล และแผนการสอน' },
+                { id: 5, title: 'ORCID iD (0000-0002-1825-0001)', category: 'งานวิจัย', url: 'https://orcid.org', icon: 'fa-id-badge', clicks: 890, active: true, pinned: false, desc: 'รหัสประจำตัวนักวิจัยสากล' },
+                { id: 6, title: 'จองเวลาเข้าพบ (Office Hours Booking)', category: 'การเรียนการสอน', url: 'https://calendly.com', icon: 'fa-calendar-check', clicks: 980, active: true, pinned: false, desc: 'ระบบนัดหมายปรึกษาการเรียนและงานวิจัย' },
+                { id: 7, title: 'Scopus Author Profile', category: 'งานวิจัย', url: 'https://scopus.com', icon: 'fa-book-bookmark', clicks: 620, active: true, pinned: false, desc: 'ฐานข้อมูลผลงานวิชาการระดับนานาชาติ h-index: 14' },
+                { id: 8, title: 'ResearchGate Profile', category: 'ช่องทางติดต่อ', url: 'https://researchgate.net', icon: 'fa-flask', clicks: 430, active: true, pinned: false, desc: 'เครือข่ายสังคมวิชาการและดาวน์โหลดเอกสารฉบับเต็ม' },
+                { id: 9, title: 'LinkedIn Professional Profile', category: 'ช่องทางติดต่อ', url: 'https://linkedin.com', icon: 'fa-brands fa-linkedin', clicks: 760, active: true, pinned: false, desc: 'ประวัติการทำงานและการเชื่อมต่อทางวิชาชีพ' }
+            ],
+
+            qrColor: '#db2777'
+        };
+
+        // Chart Instances
+        let viewsChartInstance = null;
+        let sourcesChartInstance = null;
+        let qrCodeInstance = null;
+        let modalQrInstance = null;
+
+        // INITIALIZATION ON LOAD
+        window.addEventListener('DOMContentLoaded', () => {
+            renderProfile();
+            renderCategoryChips();
+            renderPublicLinks();
+            populateProfileForm();
+            renderDashLinksList();
+            initCharts();
+            generateQrCodes();
+        });
+
+        // VIEW & THEME SWITCHING
+        function switchMainView(view) {
+            appState.currentView = view;
+            const btnPublic = document.getElementById('btnViewPublic');
+            const btnDash = document.getElementById('btnViewDashboard');
+            const secPublic = document.getElementById('publicViewSection');
+            const secDash = document.getElementById('dashboardViewSection');
+            const frameToggle = document.getElementById('frameToggleContainer');
+
+            if (view === 'public') {
+                btnPublic.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 bg-univ-600 text-white shadow-sm';
+                btnDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700/50';
+                secPublic.classList.remove('hidden');
+                secDash.classList.add('hidden');
+                frameToggle.classList.remove('hidden');
+            } else {
+                btnDash.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 bg-univ-600 text-white shadow-sm';
+                btnPublic.className = 'px-3.5 py-1.5 rounded-lg text-xs font-medium transition-all duration-200 flex items-center space-x-2 text-slate-300 hover:text-white hover:bg-slate-700/50';
+                secDash.classList.remove('hidden');
+                secPublic.classList.add('hidden');
+                frameToggle.classList.add('hidden');
+            }
+        }
+
+        function toggleDeviceFrame(mode) {
+            appState.deviceFrame = mode;
+            const container = document.getElementById('publicContainer');
+            const shell = document.getElementById('mobileShell');
+            const notch = document.getElementById('mobileNotchHeader');
+            const btnFull = document.getElementById('btnFrameFull');
+            const btnMobile = document.getElementById('btnFrameMobile');
+
+            if (mode === 'mobile') {
+                container.className = 'max-w-md mx-auto px-4 py-4';
+                shell.className = 'mobile-device-frame bg-white overflow-y-auto no-scrollbar mx-auto';
+                notch.classList.remove('hidden');
+                btnMobile.className = 'p-1.5 rounded-lg text-xs transition-colors bg-slate-700 text-white';
+                btnFull.className = 'p-1.5 rounded-lg text-xs transition-colors text-slate-400 hover:text-white';
+            } else {
+                container.className = 'max-w-2xl mx-auto px-4';
+                shell.className = 'w-full bg-white rounded-3xl shadow-xl overflow-hidden border border-slate-200/80 transition-all duration-300';
+                notch.classList.add('hidden');
+                btnFull.className = 'p-1.5 rounded-lg text-xs transition-colors bg-slate-700 text-white';
+                btnMobile.className = 'p-1.5 rounded-lg text-xs transition-colors text-slate-400 hover:text-white';
+            }
+        }
+
+        function changeUniversityTheme(themeClass) {
+            document.body.className = `h-full text-slate-800 ${themeClass} flex flex-col font-sans transition-colors duration-300`;
+            appState.currentTheme = themeClass;
+            
+            // Sync QR color default
+            const themeColors = {
+                'theme-chula': '#db2777',
+                'theme-ku': '#059669',
+                'theme-mahidol': '#1d4ed8',
+                'theme-tu': '#dc2626',
+                'theme-sut': '#ea580c',
+                'theme-cmu': '#7c3aed'
+            };
+            if (themeColors[themeClass]) {
+                setQrColor(themeColors[themeClass]);
+            }
+            showToast('เปลี่ยนอัตลักษณ์สีมหาวิทยาลัยแล้ว');
+        }
+
+        // RENDER PUBLIC PROFILE
+        function renderProfile() {
+            const p = appState.profile;
+            document.getElementById('displayName').innerText = p.name;
+            document.getElementById('displayPosition').innerText = p.position;
+            document.getElementById('displayFaculty').innerText = p.faculty;
+            document.getElementById('displayUniversity').innerText = p.university;
+            document.getElementById('displayBio').innerText = p.bio;
+            document.getElementById('displayOffice').innerText = p.office;
+            document.getElementById('displayEmail').innerText = p.email;
+            document.getElementById('displayOfficeHours').innerText = p.officeHours;
+            document.getElementById('displayAvatar').src = p.avatar;
+            document.getElementById('displayCover').src = p.cover;
+
+            // Sidebar sync
+            document.getElementById('dashSidebarName').innerText = p.name;
+            document.getElementById('dashSidebarAvatar').src = p.avatar;
+        }
+
+        function renderCategoryChips() {
+            const container = document.getElementById('categoryChips');
+            container.innerHTML = appState.categories.map(cat => {
+                const isActive = cat === appState.activeCategory;
+                const activeClass = isActive ? 'bg-univ-600 text-white shadow-sm' : 'bg-slate-100 text-slate-600 hover:bg-slate-200';
+                return `<button onclick="setCategory('${cat}')" class="px-3 py-1.5 rounded-xl font-medium whitespace-nowrap transition ${activeClass}">${cat}</button>`;
+            }).join('');
+        }
+
+        function setCategory(cat) {
+            appState.activeCategory = cat;
+            renderCategoryChips();
+            renderPublicLinks();
+        }
+
+        function filterLinks() {
+            appState.searchQuery = document.getElementById('publicSearchInput').value.toLowerCase();
+            renderPublicLinks();
+        }
+
+        function renderPublicLinks() {
+            const container = document.getElementById('publicLinksContainer');
+            
+            const filtered = appState.links.filter(link => {
+                if (!link.active) return false;
+                const matchCategory = (appState.activeCategory === 'ทั้งหมด') || (link.category === appState.activeCategory);
+                const matchSearch = link.title.toLowerCase().includes(appState.searchQuery) || link.desc.toLowerCase().includes(appState.searchQuery);
+                return matchCategory && matchSearch;
+            });
+
+            // Sort pinned first
+            filtered.sort((a, b) => (b.pinned ? 1 : 0) - (a.pinned ? 1 : 0));
+
+            if (filtered.length === 0) {
+                container.innerHTML = `
+                    <div class="p-8 text-center bg-slate-50 rounded-2xl border border-dashed border-slate-200 text-slate-400 text-xs">
+                        <i class="fa-solid fa-link-slash text-2xl mb-2"></i>
+                        <p>ไม่พบลายการลิงก์ตามเงื่อนไขการค้นหา</p>
+                    </div>
+                `;
+                return;
+            }
+
+            container.innerHTML = filtered.map(link => `
+                <a href="${link.url}" target="_blank" onclick="trackLinkClick(${link.id})" class="group block p-3.5 bg-white border border-slate-200/80 hover:border-univ-500 rounded-2xl transition-all duration-200 shadow-sm hover:shadow-md relative overflow-hidden">
+                    ${link.pinned ? `<div class="absolute top-0 right-0 bg-amber-500 text-white text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">📌 ปักหมุด</div>` : ''}
+                    <div class="flex items-center space-x-3.5">
+                        <div class="w-11 h-11 rounded-xl bg-univ-50 text-univ-600 group-hover:bg-univ-600 group-hover:text-white transition-all duration-200 flex items-center justify-center text-lg flex-shrink-0">
+                            <i class="fa-solid ${link.icon || 'fa-link'}"></i>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h3 class="text-xs sm:text-sm font-bold text-slate-900 truncate group-hover:text-univ-600 transition-colors">${link.title}</h3>
+                            </div>
+                            <p class="text-[11px] text-slate-500 truncate mt-0.5">${link.desc}</p>
+                        </div>
+                        <div class="text-right flex-shrink-0">
+                            <span class="text-[10px] font-semibold bg-slate-100 text-slate-600 px-2 py-1 rounded-lg group-hover:bg-univ-100 group-hover:text-univ-700 transition">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-[9px] mr-1"></i>
+                                ${link.clicks.toLocaleString()} คลิก
+                            </span>
+                        </div>
+                    </div>
+                </a>
+            `).join('');
+        }
+
+        function trackLinkClick(id) {
+            const link = appState.links.find(l => l.id === id);
+            if (link) {
+                link.clicks++;
+                renderPublicLinks();
+                renderDashLinksList();
+                updateStatSummary();
+                showToast(`กำลังเปิด: ${link.title}`);
+            }
+        }
+
+        // DASHBOARD TAB SWITCHING
+        function switchDashTab(tabKey) {
+            const tabs = ['profile', 'links', 'analytics', 'qr'];
+            tabs.forEach(t => {
+                const btn = document.getElementById(`dashTabBtn-${t}`);
+                const content = document.getElementById(`dashTabContent-${t}`);
+                if (t === tabKey) {
+                    btn.className = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition bg-univ-50 text-univ-700';
+                    content.classList.remove('hidden');
+                } else {
+                    btn.className = 'w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl text-xs font-semibold transition text-slate-600 hover:bg-slate-50 hover:text-slate-900';
+                    content.classList.add('hidden');
+                }
+            });
+        }
+
+        // PROFILE EDITOR FUNCTIONS
+        function populateProfileForm() {
+            const p = appState.profile;
+            document.getElementById('editTitle').value = p.title;
+            document.getElementById('editName').value = p.name;
+            document.getElementById('editPosition').value = p.position;
+            document.getElementById('editFaculty').value = p.faculty;
+            document.getElementById('editBio').value = p.bio;
+            document.getElementById('editOffice').value = p.office;
+            document.getElementById('editEmail').value = p.email;
+            document.getElementById('editOfficeHours').value = p.officeHours;
+            document.getElementById('editAvatar').value = p.avatar;
+            document.getElementById('editCover').value = p.cover;
+        }
+
+        function saveProfileChanges() {
+            appState.profile.title = document.getElementById('editTitle').value;
+            appState.profile.name = document.getElementById('editName').value;
+            appState.profile.position = document.getElementById('editPosition').value;
+            appState.profile.faculty = document.getElementById('editFaculty').value;
+            appState.profile.bio = document.getElementById('editBio').value;
+            appState.profile.office = document.getElementById('editOffice').value;
+            appState.profile.email = document.getElementById('editEmail').value;
+            appState.profile.officeHours = document.getElementById('editOfficeHours').value;
+            appState.profile.avatar = document.getElementById('editAvatar').value;
+            appState.profile.cover = document.getElementById('editCover').value;
+
+            renderProfile();
+            showToast('บันทึกข้อมูลโปรไฟล์สำเร็จ');
+        }
+
+        // LINK MANAGER FUNCTIONS
+        function renderDashLinksList() {
+            const container = document.getElementById('dashLinksList');
+            document.getElementById('dashLinkCountBadge').innerText = appState.links.length;
+
+            container.innerHTML = appState.links.map((link, idx) => `
+                <div class="bg-white p-4 rounded-2xl border border-slate-200/80 shadow-sm flex items-center justify-between gap-4">
+                    <div class="flex items-center space-x-3 min-w-0">
+                        <div class="w-10 h-10 rounded-xl bg-slate-100 text-slate-600 flex items-center justify-center flex-shrink-0 text-base">
+                            <i class="fa-solid ${link.icon || 'fa-link'}"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <div class="flex items-center gap-2">
+                                <h4 class="text-xs sm:text-sm font-bold text-slate-900 truncate">${link.title}</h4>
+                                <span class="text-[10px] bg-slate-100 text-slate-600 px-2 py-0.5 rounded-full">${link.category}</span>
+                                ${link.pinned ? `<span class="text-[10px] bg-amber-100 text-amber-700 px-2 py-0.5 rounded-full font-bold">ปักหมุด</span>` : ''}
+                            </div>
+                            <p class="text-[11px] text-slate-500 truncate">${link.url}</p>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center space-x-2 flex-shrink-0">
+                        <span class="text-xs text-slate-400 mr-2 font-medium hidden sm:inline"><i class="fa-solid fa-chart-line text-univ-600"></i> ${link.clicks} คลิก</span>
+                        
+                        <!-- Toggle Active -->
+                        <button onclick="toggleLinkActive(${link.id})" class="px-2.5 py-1 rounded-lg text-xs font-semibold ${link.active ? 'bg-emerald-100 text-emerald-700' : 'bg-slate-100 text-slate-500'}">
+                            ${link.active ? 'เปิดแสดง' : 'ซ่อน'}
+                        </button>
+
+                        <!-- Reorder Up/Down -->
+                        <button onclick="moveLink(${idx}, -1)" ${idx === 0 ? 'disabled class="text-slate-300 p-1.5"' : 'class="text-slate-500 hover:text-slate-800 p-1.5"'}>
+                            <i class="fa-solid fa-arrow-up"></i>
+                        </button>
+                        <button onclick="moveLink(${idx}, 1)" ${idx === appState.links.length - 1 ? 'disabled class="text-slate-300 p-1.5"' : 'class="text-slate-500 hover:text-slate-800 p-1.5"'}>
+                            <i class="fa-solid fa-arrow-down"></i>
+                        </button>
+
+                        <!-- Edit & Delete -->
+                        <button onclick="openEditLinkModal(${link.id})" class="p-1.5 text-slate-500 hover:text-univ-600">
+                            <i class="fa-solid fa-pen-to-square"></i>
+                        </button>
+                        <button onclick="deleteLink(${link.id})" class="p-1.5 text-slate-400 hover:text-red-600">
+                            <i class="fa-solid fa-trash-can"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function toggleLinkActive(id) {
+            const link = appState.links.find(l => l.id === id);
+            if (link) {
+                link.active = !link.active;
+                renderDashLinksList();
+                renderPublicLinks();
+                showToast(link.active ? 'เปิดแสดงผลลิงก์แล้ว' : 'ซ่อนลิงก์สำเร็จ');
+            }
+        }
+
+        function moveLink(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= appState.links.length) return;
+            const temp = appState.links[index];
+            appState.links[index] = appState.links[newIndex];
+            appState.links[newIndex] = temp;
+            renderDashLinksList();
+            renderPublicLinks();
+        }
+
+        function openAddLinkModal() {
+            document.getElementById('linkModalTitle').innerText = 'เพิ่มลิงก์ใหม่';
+            document.getElementById('linkEditId').value = '';
+            document.getElementById('linkTitleInput').value = '';
+            document.getElementById('linkUrlInput').value = '';
+            document.getElementById('linkDescInput').value = '';
+            document.getElementById('linkIconInput').value = 'fa-link';
+            document.getElementById('linkPinnedCheckbox').checked = false;
+            document.getElementById('linkModal').classList.remove('hidden');
+        }
+
+        function openEditLinkModal(id) {
+            const link = appState.links.find(l => l.id === id);
+            if (!link) return;
+            document.getElementById('linkModalTitle').innerText = 'แก้ไขลิงก์';
+            document.getElementById('linkEditId').value = link.id;
+            document.getElementById('linkTitleInput').value = link.title;
+            document.getElementById('linkUrlInput').value = link.url;
+            document.getElementById('linkDescInput').value = link.desc || '';
+            document.getElementById('linkCategorySelect').value = link.category;
+            document.getElementById('linkIconInput').value = link.icon || 'fa-link';
+            document.getElementById('linkPinnedCheckbox').checked = !!link.pinned;
+            document.getElementById('linkModal').classList.remove('hidden');
+        }
+
+        function closeLinkModal() {
+            document.getElementById('linkModal').classList.add('hidden');
+        }
+
+        function saveLinkItem() {
+            const id = document.getElementById('linkEditId').value;
+            const title = document.getElementById('linkTitleInput').value;
+            const url = document.getElementById('linkUrlInput').value;
+            const desc = document.getElementById('linkDescInput').value;
+            const category = document.getElementById('linkCategorySelect').value;
+            const icon = document.getElementById('linkIconInput').value || 'fa-link';
+            const pinned = document.getElementById('linkPinnedCheckbox').checked;
+
+            if (id) {
+                // Edit existing
+                const link = appState.links.find(l => l.id == id);
+                if (link) {
+                    link.title = title;
+                    link.url = url;
+                    link.desc = desc;
+                    link.category = category;
+                    link.icon = icon;
+                    link.pinned = pinned;
+                }
+            } else {
+                // New link
+                appState.links.unshift({
+                    id: Date.now(),
+                    title, url, desc, category, icon, pinned,
+                    clicks: 0,
+                    active: true
+                });
+            }
+
+            closeLinkModal();
+            renderDashLinksList();
+            renderPublicLinks();
+            showToast('บันทึกข้อมูลลิงก์แล้ว');
+        }
+
+        function deleteLink(id) {
+            appState.links = appState.links.filter(l => l.id !== id);
+            renderDashLinksList();
+            renderPublicLinks();
+            showToast('ลบลายการลิงก์เรียบร้อยแล้ว');
+        }
+
+        function updateStatSummary() {
+            const totalClicks = appState.links.reduce((acc, l) => acc + l.clicks, 0);
+            document.getElementById('statTotalClicks').innerText = totalClicks.toLocaleString();
+        }
+
+        // ANALYTICS CHARTS INITIALIZATION
+        function initCharts() {
+            // Line Chart - Weekly Visits
+            const ctxViews = document.getElementById('viewsChart').getContext('2d');
+            viewsChartInstance = new Chart(ctxViews, {
+                type: 'line',
+                data: {
+                    labels: ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัสบดี', 'ศุกร์', 'เสาร์', 'อาทิตย์'],
+                    datasets: [{
+                        label: 'จำนวนผู้เข้าชม',
+                        data: [1200, 1900, 3000, 2500, 2200, 1500, 2220],
+                        borderColor: '#db2777',
+                        backgroundColor: 'rgba(219, 39, 119, 0.1)',
+                        fill: true,
+                        tension: 0.4,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: {
+                        y: { grid: { color: '#f1f5f9' }, ticks: { font: { family: 'Prompt' } } },
+                        x: { grid: { display: false }, ticks: { font: { family: 'Prompt' } } }
+                    }
+                }
+            });
+
+            // Doughnut Chart - Traffic Sources
+            const ctxSources = document.getElementById('sourcesChart').getContext('2d');
+            sourcesChartInstance = new Chart(ctxSources, {
+                type: 'doughnut',
+                data: {
+                    labels: ['สแกน QR Code', 'เว็บมหาวิทยาลัย', 'Social Media', 'ค้นหาใน Google'],
+                    datasets: [{
+                        data: [45, 30, 15, 10],
+                        backgroundColor: ['#db2777', '#059669', '#3b82f6', '#f59e0b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { font: { family: 'Prompt', size: 11 } } } }
+                }
+            });
+        }
+
+        // QR CODE GENERATOR & STUDIO
+        function generateQrCodes() {
+            const profileUrl = 'https://bio.university.ac.th/@wichit.w';
+            
+            // Clear existing
+            document.getElementById('dashQrContainer').innerHTML = '';
+            document.getElementById('modalQrCode').innerHTML = '';
+
+            qrCodeInstance = new QRCode(document.getElementById('dashQrContainer'), {
+                text: profileUrl,
+                width: 150,
+                height: 150,
+                colorDark : appState.qrColor,
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+
+            modalQrInstance = new QRCode(document.getElementById('modalQrCode'), {
+                text: profileUrl,
+                width: 180,
+                height: 180,
+                colorDark : appState.qrColor,
+                colorLight : "#ffffff",
+                correctLevel : QRCode.CorrectLevel.H
+            });
+        }
+
+        function setQrColor(color) {
+            appState.qrColor = color;
+            generateQrCodes();
+            showToast('ปรับแต่งสี QR Code แล้ว');
+        }
+
+        function openQrModal() {
+            document.getElementById('modalQrName').innerText = appState.profile.name;
+            document.getElementById('qrModal').classList.remove('hidden');
+        }
+
+        function closeQrModal() {
+            document.getElementById('qrModal').classList.add('hidden');
+        }
+
+        function downloadQrCode(format) {
+            const img = document.querySelector('#modalQrCode img') || document.querySelector('#dashQrContainer img');
+            if (img && img.src) {
+                const a = document.createElement('a');
+                a.href = img.src;
+                a.download = `QR_Profile_${appState.profile.name}.png`;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                showToast('ดาวน์โหลดไฟล์ QR Code สำเร็จ');
+            } else {
+                showToast('กรุณารอระบบสร้างไฟล์ QR สักครู่');
+            }
+        }
+
+        // VCARD EXPORT FUNCTION
+        function downloadVCard() {
+            const p = appState.profile;
+            const vCardData = `BEGIN:VCARD
+VERSION:3.0
+FN:${p.name}
+TITLE:${p.position}
+ORG:${p.university};${p.faculty}
+EMAIL;TYPE=INTERNET:${p.email}
+NOTE:${p.office} | ${p.officeHours}
+URL:https://bio.university.ac.th/@wichit.w
+END:VCARD`;
+
+            const blob = new Blob([vCardData], { type: 'text/vcard;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${p.name}.vcf`;
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+            showToast('ส่งออก vCard สำเร็จ');
+        }
+
+        // UTILITY FUNCTIONS
+        function copyProfileLink() {
+            const dummy = document.createElement('input');
+            document.body.appendChild(dummy);
+            dummy.value = 'https://bio.university.ac.th/@wichit.w';
+            dummy.select();
+            document.execCommand('copy');
+            document.body.removeChild(dummy);
+            showToast('คัดลอก URL ลิงก์โปรไฟล์ไปยัง Clipboard แล้ว');
+        }
+
+        function showToast(message) {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            toast.classList.remove('translate-y-20', 'opacity-0', 'pointer-events-none');
+            setTimeout(() => {
+                toast.classList.add('translate-y-20', 'opacity-0', 'pointer-events-none');
+            }, 2500);
+        }
+    </script>
+</body>
+</html>
